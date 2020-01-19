@@ -1,0 +1,13 @@
+{
+    "actor": {
+        "id": "123",
+        "type": "sensor",
+        "name": "PhoneBooth1",
+        "status": "nobody"
+     },
+     "verb": "report",
+     "publish": 1562047239621,
+     "description": "IR monitoring app",
+     "ec_event_id": "this-is-a-unique-id",
+     "ec_event_time": 123423151235
+}

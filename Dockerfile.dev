@@ -1,0 +1,19 @@
+# base image
+FROM python:3.7.4-slim
+
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y git vim
+
+RUN pip install -U pip && \
+    pip install --user pipenv
+
+
+
+# Python packages install
+# RUN mkdir /usr/
+
+
+# production environment
+EXPOSE 5000
+ENV FLASK_APP=src/app.py

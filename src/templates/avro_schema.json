@@ -1,0 +1,54 @@
+{
+    "type" : "record",
+    "name" : "MyClass",
+    "doc": "doc",
+    "namespace" : "com.test.avro",
+    "fields" : [ {
+      "name" : "actor",
+      "type" : {
+        "type" : "record",
+        "name" : "actor",
+        "doc": "doc",
+        "fields" : [ {
+          "name" : "id",
+          "doc": "doc",
+          "type" : "string"
+        }, {
+          "name" : "type",
+          "doc": "doc",
+          "type" : "string"
+        }, {
+          "name" : "name",
+          "doc": "doc",
+          "type" : "string"
+        }, {
+          "name" : "status",
+          "doc": "doc",
+          "type" : "string"
+        } ]
+      }
+    }, {
+      "name" : "verb",
+      "doc": "doc",
+      "type" : "string"
+    }, {
+      "name" : "publish",
+      "doc": "doc",
+      "type" : "string"
+    }, {
+      "name" : "description",
+      "doc": "doc",
+      "type" : "string"
+    }, {
+      "name" : "ec_event_id",
+      "doc": "doc",
+      "type" : "string"
+    }, {
+      "name" : "ec_event_time",
+      "doc": "doc",
+      "type" : {
+        "type": "long",
+        "logicalType": "timestamp-millis"
+      }
+    } ]
+}
