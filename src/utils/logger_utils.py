@@ -6,7 +6,6 @@ from datetime import date, datetime, time
 import traceback
 import importlib
 
-from kafka import KafkaProducer
 from logging import Formatter                                                          
 from logging import StreamHandler 
 from inspect import istraceback
@@ -59,12 +58,6 @@ class LoggerFactory():
             host = kwargs.pop('host', '127.0.0.1')
             port = kwargs.pop('port', '3333')
             handler_ins = logging.handlers.SocketHandler(host, port)
-        elif Utils.str_eq(handler, 'KAFKA'):
-            broker = kwargs.pop('broker', None)
-            topic = kwargs.pop('topic', None)
-            if broker is None or topic is None:
-                raise ValueError('wrong parameters in kafka handler')
-            handler_ins = KafkaHandler(broker, topic)
         elif Utils.str_eq(handler, 'CONSOLE'):
             handler_ins = logging.StreamHandler()
         else:
@@ -266,18 +259,3 @@ class JsonFormatter(logging.Formatter):
         log_record = self.process_log_record(log_record)
 
         return "%s%s" % (self.prefix, self.jsonify_log_record(log_record))
-
-
-class KafkaHandler(StreamHandler):
-    def __init__(self, broker, topic):
-        super(KafkaHandler, self).__init__()
-        self._broker = broker
-        self._topic = topic
-        self._kafka_producer = KafkaProducer(bootstrap_servers=broker)
-
-    def emit(self, record):
-        try:
-            msg = self.format(record)
-            self._kafka_producer.send(self._topic, value=bytes(msg, 'utf-8'))
-        except Exception:
-            self.handleError(record)

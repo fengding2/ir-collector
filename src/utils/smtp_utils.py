@@ -12,7 +12,7 @@ subject = 'IrOnPrem Alarm'
 msg = """
     Dear Master, 
 
-    This is an offboard message for ir-sensors (%s). 
+    This is an offline message for ir-sensors %s. 
     FYI.
 
     Yours Truly,

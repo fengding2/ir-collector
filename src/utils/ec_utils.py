@@ -12,7 +12,8 @@ SCHEMA_PATH = CURRENT_DIR + '/activity_chn.avro'
 
 STG_URL = "https://eventcollector.enigma.wwrkr.cn"
 PRD_URL = "https://eventcollector.oracle.wwrkr.cn"
-
+STG_PSWORD = "NzE0ODFBYzkwRDc5Q0VhQWM5MTVkN0Q5MTllQzMz"
+PRD_PSWORD = "NzE0ODFBYzkwRDc5Q0VhQWM5MTVkN0Q5MTllQzMz"
 
 class AbstractReporter(abc.ABC):
     def __init__(self, **kwargs):
@@ -30,13 +31,15 @@ class FakeReporter(AbstractReporter):
         self.logger.info("Fake report: " + str(content))
 
 class EventReporter(AbstractReporter):
-    def __init__(self, logger, env='dev', appname='appliedscience', version="v1", secret="a test secret", timeout=10):
+    def __init__(self, logger, env='dev', appname='appliedscience', version="v1", timeout=10):
         if env == 'prd':
             self.url = PRD_URL
+            self.secret = PRD_PSWORD
         else:
             self.url = STG_URL
+            self.secret = STG_PSWORD
         self.logger = logger
-        self.ec = event_collector.EventRegister(self.url, appname, version, secret, timeout=timeout)
+        self.ec = event_collector.EventRegister(self.url, appname, version, self.secret, timeout=timeout)
         self.register_schema(SCHEMA_PATH)
 
     def _set_loop(self):
