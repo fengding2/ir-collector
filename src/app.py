@@ -98,6 +98,7 @@ loggerfactory.add_handler(handler='TIME_FILE', format=DEFAULT_LOG_FORMAT,
 log_dir=LOG_PATH, log_name=LOG_FILE_NAME, level='INFO')
 logger = loggerfactory.get_logger()
 
+logger.info("Launch options: %s" % str(app_options))
 # 4. initialize functional components and api resources
 event_reporter = None
 if app_options['app_event']:
@@ -116,5 +117,4 @@ api.add_resource(SensorReportAPI, '/report', '/report//', resource_class_kwargs=
 
 if __name__ == "__main__":
     # launch the app
-    logger.info("Launch options: %s" % str(app_options))
     app.run(debug=True, port=5000)

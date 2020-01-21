@@ -13,7 +13,7 @@ SCHEMA_PATH = CURRENT_DIR + '/activity_chn.avro'
 STG_URL = "https://eventcollector.enigma.wwrkr.cn"
 PRD_URL = "https://eventcollector.oracle.wwrkr.cn"
 STG_PSWORD = "NzE0ODFBYzkwRDc5Q0VhQWM5MTVkN0Q5MTllQzMz"
-PRD_PSWORD = "NzE0ODFBYzkwRDc5Q0VhQWM5MTVkN0Q5MTllQzMz"
+PRD_PSWORD = "MUVGRUJiYTRmOTdFYkY2Qzg1ZkRmNGUwZjdlM0Fl"
 
 class AbstractReporter(abc.ABC):
     def __init__(self, **kwargs):
