@@ -9,7 +9,7 @@ RUN pip install -U pip && \
 
 RUN mkdir -p /root/workspace
 RUN pip install async-timeout==3.0.1
-RUN cd /root/workspace/ && git clone https://fengding2:a17887f643068ce63b65b5cb816947a79c7b135e@github.com/WeConnect/eventcollector-python.git
+RUN cd /root/workspace/ && git clone https://fengding2:9ba774c51774b248cca1975c9aac724c8153e260@github.com/WeConnect/eventcollector-python.git
 RUN cd /root/workspace/eventcollector-python && python3 setup.py install
 
 WORKDIR /root/workspace

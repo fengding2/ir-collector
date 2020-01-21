@@ -47,7 +47,7 @@ class EventReporter(AbstractReporter):
             loop = asyncio.get_event_loop()
             self.logger.info('use event loop in main thread')
         except RuntimeError as e:
-            self.logger.error('use event loop in spawned thread')
+            self.logger.warning('use event loop in spawned thread')
             loop = asyncio.new_event_loop()
             asyncio.set_event_loop(loop)
         return loop

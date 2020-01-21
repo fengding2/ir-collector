@@ -5,6 +5,7 @@
     "namespace" : "com.test.avro",
     "fields" : [ {
       "name" : "actor",
+      "doc": "doc",
       "type" : {
         "type" : "record",
         "name" : "actor",

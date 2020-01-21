@@ -105,6 +105,9 @@ if app_options['app_event']:
 else:
     event_reporter = FakeReporter(logger=logger)
 
+# wait for completion of event reporter initialization
+time.sleep(5)
+
 watchdog = WatchDog(contacts=app_options['contacts'], reporter=event_reporter, logger=logger, alive=app_options['app_alive'])
 watchdog.start()
 api.add_resource(SensorReportAPI, '/report', '/report//', resource_class_kwargs={ 'event_reporter': event_reporter, 'watchdog': watchdog, 'logger': logger})
