@@ -101,8 +101,10 @@ logger = loggerfactory.get_logger()
 # 4. initialize functional components and api resources
 event_reporter = None
 if app_options['app_event']:
+    logger.info("Event reporter: select real event collector client")
     event_reporter = EventReporter(logger=logger)
 else:
+    logger.info("Event reporter: select fake reporter")
     event_reporter = FakeReporter(logger=logger)
 
 # wait for completion of event reporter initialization
@@ -114,4 +116,5 @@ api.add_resource(SensorReportAPI, '/report', '/report//', resource_class_kwargs=
 
 if __name__ == "__main__":
     # launch the app
+    logger.info("Launch options: %s" % str(app_options))
     app.run(debug=True, port=5000)
