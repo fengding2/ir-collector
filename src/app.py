@@ -22,7 +22,7 @@ class SensorReportAPI(Resource):
     def _single_report(self, item, ts):
         data = {}
         try:
-            if 'offset' in item.keys() and str(item['offset']) == '0':
+            if 'offset' in item.keys() and str(item['offset']) != '0':
                 now_ts = int(ts)
                 calc_ts = now_ts * int(item['offset']) * OFFSET_UNIT
                 data['timestamp'] = str(calc_ts)
