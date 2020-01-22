@@ -8,6 +8,8 @@ from utils.ec_utils import AbstractReporter, EventReporter, FakeReporter
 import time
 import os
 
+OFFSET_UNIT = 60*6
+
 
 class SensorReportAPI(Resource):
     def __init__(self, **kwargs):
@@ -15,35 +17,49 @@ class SensorReportAPI(Resource):
         self.watchdog = kwargs['watchdog']
         self.event_reporter = kwargs['event_reporter']
         self.post_parser = reqparse.RequestParser()
-        self.post_parser.add_argument('device_id', type=str)
-        self.post_parser.add_argument('name', type=str)
-        self.post_parser.add_argument('status', type=str)
-        self.post_parser.add_argument('Q', type=str)
-        self.get_parser = reqparse.RequestParser()
-        self.get_parser.add_argument('device_id', type=str, location='args')
-        self.get_parser.add_argument('name', type=str, location='args')
-        self.get_parser.add_argument('status', type=str, location='args')
-        self.get_parser.add_argument('Q', type=str, location='args')
+        self.post_parser.add_argument('data', type=list, location='json')
 
-    def _handle(self, args):
+    def _single_report(self, item, ts):
+        data = {}
+        try:
+            if 'offset' in item.keys() and str(item['offset']) != '0':
+                now_ts = int(ts)
+                calc_ts = now_ts * int(item['offset']) * OFFSET_UNIT
+                data['timestamp'] = str(calc_ts)
+            else:
+                data['timestamp'] = ts
+            data['device_id'] = item.get('device_id', None)
+            data['name'] = item.get('name', None)
+            data['status'] = item.get('status', None)
+            data['code'] = item.get('code', None)
+            data['offset'] = item.get('offset', None)
+            data['Q'] = item.get('Q', None)
+            self.event_reporter.report(data)
+        except Exception as e:
+            self.logger.error(e)
+        return data
+
+    def _handle(self, items):
         ts = str(int(time.time()))
-        data = {'device_id': args['device_id'], 'name': args['name'], 
-        'status': args['status'], 'timestamp': ts, 'type': 'sensor', 'Q': args['Q']}
-        self.event_reporter.report(data)
-        self.watchdog.update(data['device_id'], data['name'], data['timestamp'])
-        self.logger.info('Receive msg: ' + str(data))
+        data = []
+        for item in items:
+            r = self._single_report(dict(item), ts)
+            data.append(r)
+        latest_item = items[-1]
+        self.watchdog.update(latest_item['device_id'], latest_item['name'], ts)
+        self.logger.info('Received msg: ' + str(items))
         return data
 
     def post(self):
         args = self.post_parser.parse_args()
-        data = self._handle(args)
-        return {'code': 200, 'msg': 'suc', 'data': data}
+        items = args['data']
+        if len(items) > 0:
+            data = self._handle(items)
+            return {'code': 200, 'msg': 'suc', 'data': data}
+        else:
+            self.logger.warning('Request data is empty')
+            return {'code': 500, 'msg': 'empty items'}
         
-    def get(self):
-        args = self.get_parser.parse_args()
-        data = self._handle(args)
-        return {'code': 200, 'msg': 'suc', 'data': data}
-
 def get_email_contacts():
     filename = CONTACTS_FILE
     emails = []

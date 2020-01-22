@@ -64,8 +64,8 @@ class WatchDog(threading.Thread):
                 if len(alarm_list) > 0:
                     # send alarm email
                     code, info = smtp_utils.send_emails(alarm_list, self.contacts)
-                    for info in alarm_list:
-                        sensor_id, sensor_name = info
+                    for item in alarm_list:
+                        sensor_id, sensor_name = item
                         del self.status[sensor_id]
                         del self.name_map[sensor_id]
                         self.logger.info('delete sensor cache (%s, %s)' % (sensor_id, sensor_name))
